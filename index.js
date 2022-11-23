@@ -30,6 +30,11 @@ function getGoodsList(params = {}) {
     data = data.filter((item) => regExp.test(item.category.toLowerCase()));
   }
 
+  if (params.list) {
+    const list = params.list.split(',');
+    data = data.filter((item) => list.includes(item.id));
+  }
+
   return data;
 }
 
@@ -128,19 +133,8 @@ module.exports = server = createServer(async (req, res) => {
       console.log("Доступные методы:");
       console.log(`GET ${URI_PREFIX} - получить список товаров`);
       console.log(`GET ${URI_PREFIX}/{id} - получить товар по его ID`);
-      console.log(
-        `GET ${URI_PREFIX}?{category=""} - фильтрация
-Параметры:
-        category
-        color
-        minprice
-        maxprice
-        mindisplay
-        maxdisplay`
-      );
-      console.log(
-        `GET ${URI_PREFIX}?{list="{id},{id}"} - получить товары по id`
-      );
+      console.log(`GET ${URI_PREFIX}?{list="id,id,id"} - получить список с id);`);
+
     }
   })
   // ...и вызываем запуск сервера на указанном порту
