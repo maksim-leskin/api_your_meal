@@ -212,7 +212,7 @@
       "Соус"
     ],
     "category": "hot-dog",
-    "image": "img/.jpg"
+    "image": "img/4856056854.jpg"
   },
   {
     "id": "7445538462",
@@ -223,7 +223,7 @@
     "description": "Нестареющая классика",
     "ingredients": ["Булочка", "Сосиска", "Соусы"],
     "category": "hot-dog",
-    "image": "img/4856056854.jpg"
+    "image": "img/7445538462.jpg"
   },
   {
     "id": "0245702138",
