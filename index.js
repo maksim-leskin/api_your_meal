@@ -5,6 +5,7 @@ const path = require("path");
 
 // файл для базы данных
 const DB_FILE = process.env.DB_FILE || path.resolve(__dirname, "db.json");
+const CATEGORY_FILE = process.env.DB_FILE || path.resolve(__dirname, "category.json");
 // номер порта, на котором будет запущен сервер
 const PORT = process.env.PORT || 3024;
 // префикс URI для всех методов приложения
@@ -46,6 +47,10 @@ function getItems(itemId) {
   return item;
 }
 
+function getCategory() {
+  const category = JSON.parse(readFileSync(CATEGORY_FILE) || "[]");
+  return category;
+}
 
 // создаём HTTP сервер, переданная функция будет реагировать на все запросы к нему
 module.exports = server = createServer(async (req, res) => {
@@ -59,6 +64,7 @@ module.exports = server = createServer(async (req, res) => {
     });
     return;
   }
+
 
   // этот заголовок ответа указывает, что тело ответа будет в JSON формате
   res.setHeader("Content-Type", "application/json");
@@ -82,7 +88,6 @@ module.exports = server = createServer(async (req, res) => {
     res.end(JSON.stringify({ message: "Not Found" }));
     return;
   }
-
   // убираем из запроса префикс URI, разбиваем его на путь и параметры
   const [uri, query] = req.url.substr(URI_PREFIX.length).split("?");
   const queryParams = {};
@@ -101,6 +106,8 @@ module.exports = server = createServer(async (req, res) => {
       if (uri === "" || uri === "/") {
         // /api/goods
         if (req.method === "GET") return getGoodsList(queryParams);
+      } else if (req.url.endsWith('category')) {
+        if (req.method === "GET") return getCategory();
       } else {
         // /api/goods/{id}
         // параметр {id} из URI запроса
@@ -127,11 +134,12 @@ module.exports = server = createServer(async (req, res) => {
   .on("listening", () => {
     if (process.env.NODE_ENV !== "test") {
       console.log(
-        `Сервер CRM запущен. Вы можете использовать его по адресу http://localhost:${PORT}`
+        `Сервер YOUR_MEAL запущен. Вы можете использовать его по адресу http://localhost:${PORT}`
       );
       console.log("Нажмите CTRL+C, чтобы остановить сервер");
       console.log("Доступные методы:");
       console.log(`GET ${URI_PREFIX} - получить список товаров`);
+      console.log(`GET ${URI_PREFIX}/category - получить список товаров`);
       console.log(`GET ${URI_PREFIX}/{id} - получить товар по его ID`);
       console.log(`GET ${URI_PREFIX}?{list="id,id,id"} - получить список с id);`);
 
