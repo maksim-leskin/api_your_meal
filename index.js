@@ -139,9 +139,10 @@ module.exports = server = createServer(async (req, res) => {
       console.log("Нажмите CTRL+C, чтобы остановить сервер");
       console.log("Доступные методы:");
       console.log(`GET ${URI_PREFIX} - получить список товаров`);
-      console.log(`GET ${URI_PREFIX}/category - получить список товаров`);
+      console.log(`GET ${URI_PREFIX}?category={category} - получить список товаров по категории`);
+      console.log(`GET ${URI_PREFIX}/category - получить список категорий`);
       console.log(`GET ${URI_PREFIX}/{id} - получить товар по его ID`);
-      console.log(`GET ${URI_PREFIX}?{list="id,id,id"} - получить список с id);`);
+      console.log(`GET ${URI_PREFIX}?list={id,id,id} - получить список с id);`);
 
     }
   })
