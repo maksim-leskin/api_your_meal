@@ -5,12 +5,12 @@ const path = require("path");
 
 // файл для базы данных
 const DB_FILE = process.env.DB_FILE || path.resolve(__dirname, "db.json");
-const CATEGORY_FILE = process.env.DB_FILE || path.resolve(__dirname, "category.json");
+const CATEGORY_FILE =
+  process.env.DB_FILE || path.resolve(__dirname, "category.json");
 // номер порта, на котором будет запущен сервер
 const PORT = process.env.PORT || 3024;
 // префикс URI для всех методов приложения
 const URI_PREFIX = "/api/product";
-
 
 class ApiError extends Error {
   constructor(statusCode, data) {
@@ -32,13 +32,16 @@ function getGoodsList(params = {}) {
   }
 
   if (params.list) {
-    const list = params.list.split(',');
+    const list = params.list.split(",");
     data = data.filter((item) => list.includes(item.id));
+  }
+
+  if (params.list === "") {
+    return [];
   }
 
   return data;
 }
-
 
 function getItems(itemId) {
   const goods = JSON.parse(readFileSync(DB_FILE) || "[]");
@@ -64,7 +67,6 @@ module.exports = server = createServer(async (req, res) => {
     });
     return;
   }
-
 
   // этот заголовок ответа указывает, что тело ответа будет в JSON формате
   res.setHeader("Content-Type", "application/json");
@@ -106,7 +108,7 @@ module.exports = server = createServer(async (req, res) => {
       if (uri === "" || uri === "/") {
         // /api/goods
         if (req.method === "GET") return getGoodsList(queryParams);
-      } else if (req.url.endsWith('category')) {
+      } else if (req.url.endsWith("category")) {
         if (req.method === "GET") return getCategory();
       } else {
         // /api/goods/{id}
@@ -139,11 +141,12 @@ module.exports = server = createServer(async (req, res) => {
       console.log("Нажмите CTRL+C, чтобы остановить сервер");
       console.log("Доступные методы:");
       console.log(`GET ${URI_PREFIX} - получить список товаров`);
-      console.log(`GET ${URI_PREFIX}?category={category} - получить список товаров по категории`);
+      console.log(
+        `GET ${URI_PREFIX}?category={category} - получить список товаров по категории`
+      );
       console.log(`GET ${URI_PREFIX}/category - получить список категорий`);
       console.log(`GET ${URI_PREFIX}/{id} - получить товар по его ID`);
       console.log(`GET ${URI_PREFIX}?list={id,id,id} - получить список с id);`);
-
     }
   })
   // ...и вызываем запуск сервера на указанном порту
